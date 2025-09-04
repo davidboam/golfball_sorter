@@ -1,0 +1,11 @@
+{% extends "layout.html" %}
+{% block content %}
+<h1>Golf Ball Sorter</h1>
+<div class="controls">
+  <form action="/capture" method="post"><button type="submit">Capture</button></form>
+  <p>Cameras: {% if cameras|length==0 %}<b style="color:#b00">none</b>{% else %}{{ cameras|length }} — {{ cameras|join(", ") }}{% endif %}</p>
+  <p>Model checkpoint configured: <b>{{ 'yes' if model_ckpt_set else 'no' }}</b></p>
+</div>
+<h2>Recent Sessions</h2>
+<ul class="sessions">{% for s in sessions %}<li><a href="/session/{{ s }}">{{ s }}</a></li>{% else %}<li>No sessions yet.</li>{% endfor %}</ul>
+{% endblock %}

@@ -1,0 +1,40 @@
+{% extends "layout.html" %}
+{% block content %}
+<h1>Session {{ session_id }}</h1>
+<h2>Images</h2>
+<div class="grid">
+{% for img in images %}
+  <div class="card"><img src="/captures/{{ session_id }}/{{ img }}" alt="{{ img }}"><div class="caption">{{ img }} — <a href="/session/{{ session_id }}/gradcam/{{ img }}?head=grade">Grad-CAM grade</a> | <a href="/session/{{ session_id }}/gradcam/{{ img }}?head=brand">Grad-CAM brand</a></div></div>
+{% else %}<p>No images yet. Refresh in a moment.</p>{% endfor %}
+</div>
+<h2>Prediction</h2>
+{% if pred %}
+  {% if pred.error %}<pre class="error">{{ pred.error }}</pre>
+  {% else %}
+    <table class="pred">
+      <tr><th>Brand</th><td>{{ pred.pred_brand }} ({{ '%.3f'|format(pred.pred_brand_conf) }})</td></tr>
+      <tr><th>Grade</th><td>{{ pred.pred_grade }} ({{ '%.3f'|format(pred.pred_grade_conf) }})</td></tr>
+    </table>
+    <details><summary>Details</summary><pre>{{ pred | tojson(indent=2) }}</pre></details>
+    <h3>Accept / Correct Label</h3>
+    <form action="/session/{{ session_id }}/label" method="post" class="label-form">
+      <label>Brand: <input name="brand" value="{{ pred.pred_brand }}"></label>
+      <label>Model: <input name="model" value="{{ pred.get('pred_model','Unknown') if pred else 'Unknown' }}"></label>
+      <label>Grade:
+        <select name="grade">{% for g in ['Pearl','A','B','C','D'] %}<option value="{{ g }}" {% if pred.pred_grade==g %}selected{% endif %}>{{ g }}</option>{% endfor %}</select>
+      </label>
+      <input type="hidden" name="source" value="accept">
+      <button type="submit">Accept prediction</button>
+    </form>
+    <form action="/session/{{ session_id }}/label" method="post" class="label-form">
+      <label>Brand: <input name="brand" value="{{ pred.pred_brand }}"></label>
+      <label>Model: <input name="model" value="{{ pred.get('pred_model','Unknown') if pred else 'Unknown' }}"></label>
+      <label>Grade:
+        <select name="grade">{% for g in ['Pearl','A','B','C','D'] %}<option value="{{ g }}" {% if pred.pred_grade==g %}selected{% endif %}>{{ g }}</option>{% endfor %}</select>
+      </label>
+      <input type="hidden" name="source" value="human">
+      <button type="submit">Correct and Save</button>
+    </form>
+  {% endif %}
+{% else %}<p>No prediction yet — configure MODEL_CKPT and recapture, or run training.</p>{% endif %}
+{% endblock %}

@@ -1,0 +1,15 @@
+body{font-family:system-ui,Arial,sans-serif;margin:0;background:#f7f7f9;color:#111}
+nav{background:#222;color:#fff;padding:10px 16px} nav a{color:#fff;text-decoration:none;font-weight:600}
+main{padding:16px} h1{margin:8px 0 16px}
+.controls button{padding:8px 16px;font-weight:700}
+.sessions{list-style:none;padding:0} .sessions li{margin:6px 0}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:12px}
+.card{background:#fff;border-radius:8px;box-shadow:0 1px 4px rgba(0,0,0,0.1);padding:8px}
+.card img{width:100%;height:auto;border-radius:6px;background:#eee}
+.caption{font-size:12px;color:#444;margin-top:4px}
+table.pred{border-collapse:collapse;background:#fff;border-radius:8px;overflow:hidden;box-shadow:0 1px 4px rgba(0,0,0,0.1)}
+table.pred th,table.pred td{padding:8px 12px;border-bottom:1px solid #eee;text-align:left}
+.error{color:#b00;background:#fee;padding:8px;border-radius:6px}
+.label-form{background:#fff;padding:10px;border-radius:8px;box-shadow:0 1px 3px rgba(0,0,0,.06);margin:10px 0}
+.label-form label{display:block;margin:6px 0}
+.label-form button{padding:6px 12px;font-weight:700}

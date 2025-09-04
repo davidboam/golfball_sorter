@@ -1,0 +1,16 @@
+version: "3.9"
+services:
+  app:
+    build: .
+    image: ball-sorter:latest
+    container_name: ball-sorter
+    environment:
+      - MODEL_CKPT=/app/runs/ballnet/best.pth
+      - DATASET_ROOT=/app/dataset_root
+      - APP_HOST=0.0.0.0
+      - APP_PORT=8000
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./:/app
+    restart: unless-stopped
