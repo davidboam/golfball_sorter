@@ -1,0 +1,29 @@
+# Python cache
+__pycache__/
+*.py[cod]
+*.egg-info/
+
+# Virtual environments
+.venv/
+.env/
+
+# OS cruft
+.DS_Store
+Thumbs.db
+
+# IDE configs
+.vscode/
+.idea/
+
+# Captures and labels
+captures/
+labels/*.csv
+
+# Model outputs / checkpoints
+models/
+checkpoints/
+*.pt
+*.pth
+
+# Logs
+*.log
