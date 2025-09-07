@@ -6,7 +6,7 @@ from picamera2 import Picamera2
 from libcamera import controls
 from PIL import Image
 
-SERVER_HOST = os.getenv("SERVER_HOST", "192.168.1.100")
+SERVER_HOST = os.getenv("SERVER_HOST", "192.168.0.5")
 SERVER_PORT = int(os.getenv("SERVER_PORT", "5001"))
 CAMERA_ID   = os.getenv("CAMERA_ID", "pi-01")
 
@@ -50,6 +50,7 @@ def init_camera():
     picam.set_controls({
         "AeEnable": True,
         "AwbEnable": True,
+        "AfMode": 1,
         # "ExposureTime": int(os.getenv("EXPOSURE_US", "10000")),
         # "AnalogueGain": float(os.getenv("ANALOG_GAIN", "1.8")),
         # "ColourGains": (float(os.getenv("CG_R", "1.8")), float(os.getenv("CG_B", "1.8")))
