@@ -8,7 +8,7 @@ from PIL import Image
 
 SERVER_HOST = os.getenv("SERVER_HOST", "192.168.0.5")
 SERVER_PORT = int(os.getenv("SERVER_PORT", "5001"))
-CAMERA_ID   = os.getenv("CAMERA_ID", "pi-01")
+CAMERA_ID   = os.getenv("CAMERA_ID", "cam1")
 
 def send_msg(sock, header: dict, payload: bytes = b""):
     h = json.dumps(header).encode("utf-8")
@@ -51,6 +51,7 @@ def init_camera():
         "AeEnable": True,
         "AwbEnable": True,
         "AfMode": 1,
+        "LensPosition": 32.0,
         # "ExposureTime": int(os.getenv("EXPOSURE_US", "10000")),
         # "AnalogueGain": float(os.getenv("ANALOG_GAIN", "1.8")),
         # "ColourGains": (float(os.getenv("CG_R", "1.8")), float(os.getenv("CG_B", "1.8")))
