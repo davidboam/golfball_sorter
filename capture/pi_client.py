@@ -50,7 +50,7 @@ def init_camera():
     picam.set_controls({
         "AeEnable": True,
         "AwbEnable": True,
-        "AfMode": 1,
+        "AfMode":  controls.AfModeEnum.Manual,
         "LensPosition": 32.0,
         # "ExposureTime": int(os.getenv("EXPOSURE_US", "10000")),
         # "AnalogueGain": float(os.getenv("ANALOG_GAIN", "1.8")),
