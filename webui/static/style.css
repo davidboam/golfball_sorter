@@ -13,3 +13,6 @@ table.pred th,table.pred td{padding:8px 12px;border-bottom:1px solid #eee;text-a
 .label-form{background:#fff;padding:10px;border-radius:8px;box-shadow:0 1px 3px rgba(0,0,0,.06);margin:10px 0}
 .label-form label{display:block;margin:6px 0}
 .label-form button{padding:6px 12px;font-weight:700}
+.panel{background:#fff;padding:10px;border-radius:8px;box-shadow:0 1px 3px rgba(0,0,0,.06);margin:10px 0}
+.panel button{margin:2px;padding:6px 12px}
+.panel button.active{background:#007acc;color:#fff}

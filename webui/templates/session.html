@@ -1,40 +1,43 @@
 {% extends "layout.html" %}
 {% block content %}
 <h1>Session {{ session_id }}</h1>
-<h2>Images</h2>
-<div class="grid">
-{% for img in images %}
-  <div class="card"><img src="/captures/{{ session_id }}/{{ img }}" alt="{{ img }}"><div class="caption">{{ img }} — <a href="/session/{{ session_id }}/gradcam/{{ img }}?head=grade">Grad-CAM grade</a> | <a href="/session/{{ session_id }}/gradcam/{{ img }}?head=brand">Grad-CAM brand</a></div></div>
-{% else %}<p>No images yet. Refresh in a moment.</p>{% endfor %}
+<div id="images" class="grid"></div>
+
+<div id="label-panel" class="panel">
+  <div style="margin-bottom:8px;">
+    <label>Attention head:
+      <select id="attn-head">
+        <option value="grade">Grade</option>
+        <option value="brand">Brand</option>
+      </select>
+    </label>
+    <button id="toggle-attn-all">Toggle Attention (All)</button>
+  </div>
+  <div id="model-suggest" class="caption"></div>
+  <div>
+    <label>Brand: <input id="brand-input" type="text" list="brand-list" autocomplete="off"></label>
+    <datalist id="brand-list"></datalist>
+  </div>
+  <div>
+    <label>Model: <input id="model-input" type="text" value="Unknown" list="model-list" autocomplete="off"></label>
+    <datalist id="model-list"></datalist>
+  </div>
+  <div>
+    Grade:
+    {% for g in ['Pearl','A','B','C','D'] %}
+      <button class="grade-btn" data-value="{{ g }}">{{ g }}</button>
+    {% endfor %}
+  </div>
+  <div>
+    Colour:
+    {% for c in ['White','Yellow','Orange','Other'] %}
+      <button class="color-btn" data-value="{{ c }}">{{ c }}</button>
+    {% endfor %}
+  </div>
+  <div><button id="save-label">Save Label</button></div>
 </div>
-<h2>Prediction</h2>
-{% if pred %}
-  {% if pred.error %}<pre class="error">{{ pred.error }}</pre>
-  {% else %}
-    <table class="pred">
-      <tr><th>Brand</th><td>{{ pred.pred_brand }} ({{ '%.3f'|format(pred.pred_brand_conf) }})</td></tr>
-      <tr><th>Grade</th><td>{{ pred.pred_grade }} ({{ '%.3f'|format(pred.pred_grade_conf) }})</td></tr>
-    </table>
-    <details><summary>Details</summary><pre>{{ pred | tojson(indent=2) }}</pre></details>
-    <h3>Accept / Correct Label</h3>
-    <form action="/session/{{ session_id }}/label" method="post" class="label-form">
-      <label>Brand: <input name="brand" value="{{ pred.pred_brand }}"></label>
-      <label>Model: <input name="model" value="{{ pred.get('pred_model','Unknown') if pred else 'Unknown' }}"></label>
-      <label>Grade:
-        <select name="grade">{% for g in ['Pearl','A','B','C','D'] %}<option value="{{ g }}" {% if pred.pred_grade==g %}selected{% endif %}>{{ g }}</option>{% endfor %}</select>
-      </label>
-      <input type="hidden" name="source" value="accept">
-      <button type="submit">Accept prediction</button>
-    </form>
-    <form action="/session/{{ session_id }}/label" method="post" class="label-form">
-      <label>Brand: <input name="brand" value="{{ pred.pred_brand }}"></label>
-      <label>Model: <input name="model" value="{{ pred.get('pred_model','Unknown') if pred else 'Unknown' }}"></label>
-      <label>Grade:
-        <select name="grade">{% for g in ['Pearl','A','B','C','D'] %}<option value="{{ g }}" {% if pred.pred_grade==g %}selected{% endif %}>{{ g }}</option>{% endfor %}</select>
-      </label>
-      <input type="hidden" name="source" value="human">
-      <button type="submit">Correct and Save</button>
-    </form>
-  {% endif %}
-{% else %}<p>No prediction yet — configure MODEL_CKPT and recapture, or run training.</p>{% endif %}
+
+<script>const SESSION_ID = "{{ session_id }}";</script>
+<script src="/static/session.js"></script>
 {% endblock %}
+

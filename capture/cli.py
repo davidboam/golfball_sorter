@@ -3,7 +3,7 @@ import argparse, subprocess, os, sys
 from pathlib import Path
 
 CAPTURE_SERVER = Path(__file__).parent / "server.py"
-INFER_SCRIPT   = Path(__file__).parents[1] / "ml" / "infer_ballnet.py"
+INFER_SCRIPT   = Path(__file__).parents[1] / "ballnet" / "infer.py"
 
 def run_server():
     print("Starting server... (Ctrl+C to stop)")

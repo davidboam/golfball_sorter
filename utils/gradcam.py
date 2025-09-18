@@ -30,20 +30,22 @@ def gradcam_for_view(model, img_tensor, aux_tensor, target_head="grade", class_i
     def bwd_hook(m, gin, gout):
         grads['x'] = gout[0]
 
-    handle_f = model.backbone.forward_features.register_forward_hook(fwd_hook)
-    handle_b = model.backbone.forward_features.register_full_backward_hook(bwd_hook)
+    handle_f = model.encoder.forward_features.register_forward_hook(fwd_hook)
+    handle_b = model.encoder.forward_features.register_full_backward_hook(bwd_hook)
 
     # replicate this image across views
     views = img_tensor.unsqueeze(1).repeat(1, n_views, 1, 1, 1)
 
-    glog, blog, attw = model(views, aux_tensor)
+    out = model(views, aux_tensor)
 
     if target_head == "brand":
+        blog = out["brand_logits"]
         probs = F.softmax(blog, dim=1)
         c = probs.argmax(dim=1).item() if class_idx is None else int(class_idx)
         target_logit = blog[0, c]
     else:
-        from ml.train_ballnet import ordinal_logits_to_probs
+        from ballnet.models.heads import ordinal_logits_to_probs
+        glog = out["grade_logits"]
         probs = ordinal_logits_to_probs(glog)
         c = probs.argmax(dim=1).item() if class_idx is None else int(class_idx)
         target_logit = glog[0, :c].sum() if c > 0 else (glog[0, 0] * 0.0)

@@ -8,7 +8,17 @@ from PIL import Image
 
 SERVER_HOST = os.getenv("SERVER_HOST", "192.168.0.5")
 SERVER_PORT = int(os.getenv("SERVER_PORT", "5001"))
-CAMERA_ID   = os.getenv("CAMERA_ID", "cam1")
+
+hostname = socket.gethostname()
+print("This Pi’s hostname:", hostname)
+
+if hostname.startswith("raspberrypi"):
+    num = int(hostname.replace("raspberrypi", ""))
+    cam_id = f"cam{num % 10}"
+else:
+    cam_id = hostname
+
+CAMERA_ID = os.getenv("CAMERA_ID", cam_id)
 
 def send_msg(sock, header: dict, payload: bytes = b""):
     h = json.dumps(header).encode("utf-8")
@@ -43,7 +53,7 @@ def jpeg_bytes_from_array(arr, quality=90):
 
 def init_camera():
     picam = Picamera2()
-    config = picam.create_still_configuration(buffer_count=2,main={"size": (1024,1024)})
+    config = picam.create_still_configuration(buffer_count=2,main={"size": (4656,3496)})
     picam.configure(config)
     picam.start()
     time.sleep(0.5)
